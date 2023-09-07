@@ -1,26 +1,27 @@
 import numpy as np
+from collections import defaultdict
 
-from utilities import formatting
+from utilities import formatting, LRfactors
 
-        
-
-def vanishingEven(u, k, n):
-    revu = list(u) +([0] * (n+1 - len(u)))
-    v = list(range(n+1,0,-1))
-    w = sum(v, revu)
+def vanishingEvenGrass(weight, k, n):
+    weight_padded = np.pad(weight, (0, n-len(weight)), mode='constant', constant_values=0)
+    rho = np.array(range(n,0,-1))
+    w = weight_padded + rho
     if 0 in set(w):
-        return True
-    wneg = diff([0]*len(w),w) 
-    vals = w + wneg
-    return not(len(set(vals))==len(vals))
+        return True 
+    return not(len(set(w))==len(np.abs(w)))
 
-def spectrSequence(u:np.array, k,n):
-    u=list(u)+[0]*(k-len(u))
+def vanishingOddGrass(weight, k, n):
+    formatted_weight = formatting(weight, k)
+    nonvanish = defaultdict(set)
     for i in range(k+1):
-        wed_i = [0]*i + [-1]*(k-i)
-        prod_i = goodLRcalc(u,wed_i,k)
+        wedge_i = [0]*(k-i) + [-1]*i
+        prod_i = LRfactors(formatted_weight, wedge_i,k)
         for p_i in prod_i:
-            if not(vanishingEven(p_i, k, n)):
-                return False
-    return True
+            if not(vanishingEvenGrass(p_i, k, n+1)):
+                nonvanish[i].add(p_i)
+    if len(nonvanish)==0:
+        return True, dict(nonvanish)
+    else:
+        return False, dict(nonvanish)
 

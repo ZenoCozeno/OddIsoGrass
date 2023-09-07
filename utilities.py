@@ -2,13 +2,11 @@ import numpy as np
 import sage.libs.lrcalc.lrcalc as lrcalc
 
 def formatting(v, k):
-    array_v = np.array(v)
+    array_v = np.array(v, dtype=int)
     padded = np.pad(array_v, (0, k-len(array_v)), mode='constant', constant_values=0)
     if not(np.array_equal(padded, np.sort(padded)[::-1])):
         raise Exception("Sorry, not correct")
     return padded
-
-
 
 def LRfactors(U_alpha, U_beta, k):
     U_alpha = np.array(U_alpha)
