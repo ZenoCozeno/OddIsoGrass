@@ -1,4 +1,5 @@
 from utilities import LRfactors, formatting
+from vanishing_odd import vanishingOddGrass
 from collections import defaultdict
 
 import numpy as np
@@ -26,6 +27,10 @@ class complex_summand:
             flattened_product.append(term)
         total_entry = complex_entry(flattened_product)
         return total_entry
+    
+    def higher_cohom_vanishing(self,k,n):
+        nonvanish = complex_summand(vanishingOddGrass(self.weight,k,n)[1], self.mult)
+        return nonvanish
     
 class complex_entry:
     def __init__(self, summands=[]):
@@ -58,7 +63,12 @@ class complex_entry:
             for j in second_term.entry:
                 partial_sum = partial_sum.sum(i.tensor(j))
         return partial_sum
- 
+    
+    def higher_cohom_vanishing(self,k,n):
+        nonvanish = complex_entry()
+        for summand in self.entry: 
+            nonvanish = nonvanish.sum(complex_entry([summand.higher_cohom_vanishing(k,n)]))
+        return nonvanish
 
 class complex:
     def __init__(self, entries):
@@ -89,6 +99,14 @@ class complex:
         for i in tensored.entries.keys():
             tensored.entries[i].normal_form()
         return tensored
+    
+    def higher_cohom_vanishing(self,k,n):
+        partial_nonvanish = defaultdict(complex_entry)
+        for i in self.entries: 
+            self.entries[i].display()
+            self.entries[i].higher_cohom_vanishing(k,n).display()
+            partial_nonvanish[i].sum(self.entries[i].higher_cohom_vanishing(k,n))
+        return complex(partial_nonvanish)
 
 def staircase(weight, k, n):
     weight = formatting(weight, k)
