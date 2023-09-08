@@ -11,9 +11,22 @@ class truncated_complex:
         self.right = right_resol
         self.left = left_resol
 
+    def partial_tensors(self, second_trunc_cpx,k,n):
+        mixed_prods = [] 
+        mixed_prods.append(self.left.tensor(second_trunc_cpx.left))
+        mixed_prods.append(self.left.tensor(second_trunc_cpx.right))
+        mixed_prods.append(self.right.tensor(second_trunc_cpx.left))
+        mixed_prods.append(self.right.tensor(second_trunc_cpx.right))
+        mixed_cohom = [i.higher_cohom_vanishing(k,n) for i in mixed_prods]
+        min_cohom = np.argmin([i.concentration() for i in mixed_cohom])
+        mixed_cohom[min_cohom].normal_form()
+        return mixed_cohom[min_cohom]
+        
+
+
 class complex_summand:
     def __init__(self, weight, multiplicity):
-        self.weight = weight
+        self.weight = tuple(weight)
         self.mult = multiplicity
     
     def display(self):
@@ -29,8 +42,12 @@ class complex_summand:
         return total_entry
     
     def higher_cohom_vanishing(self,k,n):
-        nonvanish = complex_summand(vanishingOddGrass(self.weight,k,n)[1], self.mult)
-        return nonvanish
+        return vanishingOddGrass(self.weight,k,n)[0]
+    
+    def dual(self):
+        opp = -np.array(self.weight)[::-1]
+        dual_summand = complex_summand(opp, self.mult)
+        return dual_summand
     
 class complex_entry:
     def __init__(self, summands=[]):
@@ -67,8 +84,15 @@ class complex_entry:
     def higher_cohom_vanishing(self,k,n):
         nonvanish = complex_entry()
         for summand in self.entry: 
-            nonvanish = nonvanish.sum(complex_entry([summand.higher_cohom_vanishing(k,n)]))
+            if not (summand.higher_cohom_vanishing(k,n)):
+                nonvanish = nonvanish.sum(complex_entry([summand]))
         return nonvanish
+    
+    def dual(self):
+        dual_entry = complex_entry()
+        for i in self.entry:
+            dual_entry = dual_entry.sum(complex_entry([i.dual()]))
+        return dual_entry
 
 class complex:
     def __init__(self, entries):
@@ -100,16 +124,33 @@ class complex:
             tensored.entries[i].normal_form()
         return tensored
     
+    def concentration(self):
+        nonzero = [i for i in self.entries if len(self.entries[i].entry)!=0]
+        return len(nonzero)
+    
+    def normal_form(self):
+        avoidable=[]
+        for i in self.entries:
+            self.entries[i].normal_form()
+            if all([j.mult == 0 for j in self.entries[i].entry]):
+                avoidable.append(i)
+        for p in avoidable:
+            del self.entries[p]
+                
+    
     def higher_cohom_vanishing(self,k,n):
-        partial_nonvanish = defaultdict(complex_entry)
-        for i in self.entries: 
-            self.entries[i].display()
-            self.entries[i].higher_cohom_vanishing(k,n).display()
-            partial_nonvanish[i].sum(self.entries[i].higher_cohom_vanishing(k,n))
-        return complex(partial_nonvanish)
+        nonvanish_cohoms = {i: self.entries[i].higher_cohom_vanishing(k,n) for i in self.entries}
+        nonvanish_cohoms.normal_form()
+        return complex(nonvanish_cohoms)
+    
+    def dual(self):
+        dual_cpx={}
+        for i in self.entries:
+            dual_cpx.update({ -i : self.entries[i].dual()})
+        return complex(dual_cpx)
 
 def staircase(weight, k, n):
-    weight = formatting(weight, k)
+    weight =formatting(weight, k)
     stairs = {}
     for i in range(n+2-k):
         if weight[0] - i >=  weight[1]:
