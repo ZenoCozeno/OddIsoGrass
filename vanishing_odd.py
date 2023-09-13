@@ -12,6 +12,9 @@ def vanishingEvenGrass(weight, k, n):
     return not(len(set(np.abs(w)))==len(w))
 
 def vanishingOddGrass(weight, k, n):
+    """
+        True: vanishes
+    """
     formatted_weight = formatting(weight, k)
     nonvanish = defaultdict(set)
     for i in range(k+1):
@@ -47,7 +50,7 @@ def is_Lefschetz_excep(U_alpha, k, n):
 def is_Lefschetz_basis(except_sequence, k, n):
     for index in range(len(except_sequence)):
         if not is_Lefschetz_excep(except_sequence[index],k,n):
-            print("not except")
+            print("not except:", except_sequence[index])
             return False
         for second_index in range(index+1, len(except_sequence)):
             if Lefschetz_indep(except_sequence[second_index], except_sequence[index], k, n) != list(range(2*n+2-k)):
