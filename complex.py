@@ -4,7 +4,7 @@ from collections import defaultdict, Counter
 
 import numpy as np
 import math
-
+from pprint import pprint
 
 class complex:
     """
@@ -234,13 +234,14 @@ class truncated_complex:
         """
         return truncated_complex(self.right.cone(second_trunc_cpx.right), self.left.cone(second_trunc_cpx.left))
     
-    def is_indep(self, weights:list, k:int, n:int):
+    def is_indep(self,   weights:list, k:int, n:int, verbose=False):
         """
         does the object T described by the truncated complex form an exact sequence with T, weights on IGr(k,2n+1)?
 
         Args:
             weights: a list of tuples
             k, n: data fixing the isotropic grassmannian IGr(k, 2n+1)
+            verbose: if we want the list of weights with a nonzero Ext
         """
         problem_weights=[]
         for i in weights:
@@ -250,6 +251,9 @@ class truncated_complex:
             # if a complex .amplitude() is zero, then it must be zero (the opposite is not true and requires further study)
             if trunc_cpx.dual().shortest_Tor(self,k,n).amplitude() != 0:
                 problem_weights.append(tuple(i))
+        if verbose:
+            if len(problem_weights) != 0:
+                pprint(problem_weights)
         return len(problem_weights) == 0
 
     def shortest_Tor(self, second_trunc_cpx, k,n):
