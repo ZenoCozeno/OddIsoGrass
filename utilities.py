@@ -1,5 +1,6 @@
 import numpy as np
 import sage.libs.lrcalc.lrcalc as lrcalc
+from collections import Counter
 
 def formatting(v, k):
     array_v = np.array(v, dtype=int)
@@ -17,5 +18,5 @@ def LRfactors(U_alpha, U_beta, k):
     factors_w_multip = {}
     for i in pos_factors_w_multip:
         factors_w_multip.update({tuple(formatting(i,k) + U_alpha[-1] + U_beta[-1]): pos_factors_w_multip[i]})
-    return factors_w_multip
+    return Counter(factors_w_multip)
 
