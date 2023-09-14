@@ -1,3 +1,15 @@
+"""
+This module contains the definitions of the following:
+
+Objects:
+    complex_entry: a Counter {weight:multiplicity}, where weight is  a tuple of decreasing integers
+    complex: a dictionary {degree: complex_entry}
+    truncated_complex: a pair of complexes that represent an object obtained performing a stupid truncation
+
+Functions:
+    staircase: the most relevant way to initialize a complex
+"""
+
 from utilities import LRfactors, formatting
 from vanishing_odd import vanishingOddGrass
 from collections import defaultdict, Counter
@@ -73,7 +85,7 @@ class complex:
 
     def amplitude(self):
         """
-        naive amplitude of a complex. 
+        "naive amplitude" of a complex. 
 
         Return: 
             amp: max degree with nonzero entry - min degree with nonzero entry. If complex is zero, amp = 0.  
@@ -281,7 +293,7 @@ def staircase(weight, k, m) -> complex:
     Given a weight of length 3, satisfying weight[0]-weight[2] <= n-k, this returns the associate staircase complex 
     in the Grassmannian Gr(3, m)
     Args: 
-        k, m: data fixing the grassmannian IGr(k, m)
+        k, m: data fixing the grassmannian Gr(k, m)
     Return:
         the staicase complex as in Fonarev's work.
     """

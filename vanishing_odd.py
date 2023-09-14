@@ -4,6 +4,18 @@ from collections import defaultdict
 from utilities import formatting, LRfactors
 
 def vanishingEvenGrass(weight, k, n):
+    """
+        compute cohomology of U^weight using the spectral sequence induced by the embedding in the even Grassmannian. 
+        The entries in the resolution are given by wedge^i U^{0,\dots,-1}.
+        Returns a dictionary of weight with relative position if the spectral sequence is not trivially zero. 
+
+        Args:
+            weight: a list of length k representing a weight
+            k, n: fix IGr(k,2n+1)
+        Returns:
+            boolean: True if all entries are acyclic on the even Grassmannian
+            nonvanish: a dictionary with shifts and nonvanishing entries
+    """
     weight_padded = np.pad(weight, (0, n-len(weight)), mode='constant', constant_values=0)
     rho = np.array(range(n,0,-1))
     w = weight_padded + rho
@@ -13,7 +25,16 @@ def vanishingEvenGrass(weight, k, n):
 
 def vanishingOddGrass(weight, k, n):
     """
-        True: vanishes
+        compute cohomology of U^weight using the spectral sequence induced by the embedding in the even Grassmannian. 
+        The entries in the resolution are given by wedge^i U^{0,\dots,-1}.
+        Returns a dictionary of weight with relative position if the spectral sequence is not trivially zero. 
+
+        Args:
+            weight: a list of length k representing a weight
+            k, n: fix IGr(k,2n+1)
+        Returns:
+            boolean: True if all entries are acyclic on the even Grassmannian
+            nonvanish: a dictionary with shifts and nonvanishing entries
     """
     formatted_weight = formatting(weight, k)
     nonvanish = defaultdict(set)
