@@ -5,7 +5,6 @@ from collections import defaultdict, Counter
 import numpy as np
 import math
 
-
 class complex:
     """
     This class represents a complex of the form ... -> \Sum mult * U^{weight} ->. 
@@ -104,11 +103,11 @@ class complex:
             rel_cutting_point: an integer that says how many positions from the right we want to keep in the stupid truncation
         Return:
             a truncated complex: the right side has naive amplitude rel_cutting_point, 
-                                the left side has naive amplitude self.amplitude() - rel_cutting_point,
+                                the left side has naive amplitude self.amplitude() - rel_cutting_point, concentrated in degree 0
         """
         m = max(self.degrees.keys())
-        trunc_dx = complex({pos: entry for pos, entry in self.degrees.items() if pos > m-rel_cutting_point})
-        trunc_sx = complex({pos: entry for pos, entry in self.degrees.items() if pos <= m-rel_cutting_point})
+        trunc_dx = complex({pos - m + rel_cutting_point-1 : entry for pos, entry in self.degrees.items() if pos > m-rel_cutting_point})
+        trunc_sx = complex({pos - m  + rel_cutting_point-1: entry for pos, entry in self.degrees.items() if pos <= m-rel_cutting_point})
         return truncated_complex(trunc_dx, trunc_sx)
     
     def dual(self):
@@ -234,22 +233,27 @@ class truncated_complex:
         """
         return truncated_complex(self.right.cone(second_trunc_cpx.right), self.left.cone(second_trunc_cpx.left))
     
-    def is_indep(self, weights:list, k:int, n:int):
+    def is_indep(self,   weights:list, k:int, n:int, verbose=False):
         """
         does the object T described by the truncated complex form an exact sequence with T, weights on IGr(k,2n+1)?
 
         Args:
             weights: a list of tuples
             k, n: data fixing the isotropic grassmannian IGr(k, 2n+1)
+            verbose: if we want the list of weights with a nonzero Ext
         """
-        problem_weights=[]
+        problem_weights={}
         for i in weights:
             cpx = complex({0: complex_entry({tuple(i):1})})
             # this is a bit artificial
             trunc_cpx = truncated_complex(cpx, cpx)
             # if a complex .amplitude() is zero, then it must be zero (the opposite is not true and requires further study)
             if trunc_cpx.dual().shortest_Tor(self,k,n).amplitude() != 0:
-                problem_weights.append(tuple(i))
+                problem_weights.update({tuple(i):trunc_cpx.dual().shortest_Tor(self,k,n)})
+        if verbose:
+            if len(problem_weights) != 0:
+                for weight, cohom in problem_weights.items():
+                    print(f"{weight}:\n {str(cohom)}, \n")
         return len(problem_weights) == 0
 
     def shortest_Tor(self, second_trunc_cpx, k,n):
