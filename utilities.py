@@ -2,7 +2,7 @@ import numpy as np
 import sage.libs.lrcalc.lrcalc as lrcalc
 from collections import Counter
 
-def formatting(v: list, k: int)->np.array:
+def formatting(v: list, k: int) -> np.array:
     """
     from a list v, extend it with zeros until it has length k and check if it corresponds to a dominant weight, that is
     extends a list with zeros and raises an error if the list is not decreasing
@@ -19,7 +19,7 @@ def formatting(v: list, k: int)->np.array:
         raise Exception("A weight should be decreasing")
     return padded
 
-def LRfactors(U_alpha: list, U_beta: list, k:int)-> Counter:
+def LRfactors(U_alpha: list, U_beta: list, k:int) -> Counter:
     """
     computes the tensor product with multiplicities of two weights using LR-rule. 
     This is the key point that forces the use of Sage instead of Python.
