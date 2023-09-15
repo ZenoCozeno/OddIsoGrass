@@ -291,12 +291,16 @@ class truncated_complex:
 def staircase(weight, k, m) -> complex:
     """
     Given a weight of length 3, satisfying weight[0]-weight[2] <= n-k, this returns the associate staircase complex 
-    in the Grassmannian Gr(3, m)
+    in the Grassmannian Gr(3, m).
+
     Args: 
         k, m: data fixing the grassmannian Gr(k, m)
     Return:
         the staicase complex as in Fonarev's work.
     """
+    if k!= 3:
+        raise Exception("k != 3 not implemented yet")
+    # TODO: add k!=3
     weight =formatting(weight, k)
     if weight[0]-weight[-1] > m-k:
         raise Exception("staircase is defined only if weight[0]-weight[-1] is small enough")
