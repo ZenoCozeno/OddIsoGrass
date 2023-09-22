@@ -1,4 +1,4 @@
-## oddisoGrass
+# oddisoGrass
 
 A SageMath notebook (https://www.sagemath.org) to prove exceptionality and fullness of collections of homogeneous bundles on odd isotropic Grassmannians IGr(3,2n+1).
 
@@ -6,11 +6,11 @@ In particular, the notebook [IGr(3,11)_LefschetzBasis](https://github.com/ZenoCo
 
 We think that the code can be useful for other algebraic geometers interested in the study of derived categories of odd isotropic Grassmannians from a computational viewpoint.
 
-# Installation
+## Installation
 
 To use the functions in this notebook, you don't need to install anything special. You can run the notebook on your local machine if you have SageMath > 9.4 installed.
 
-# Usage
+## Usage
 
 Check out the notebook [IGr(3,11)_LefschetzBasis](https://github.com/ZenoCozeno/oddisoGrass/blob/main/IGr(3%2C11)_LefschetzBasis.ipynb) to see a working example.
 
