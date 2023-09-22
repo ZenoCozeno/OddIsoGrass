@@ -1,1 +1,6 @@
-
+@software{Catt_oddIsoGrass,
+  author = {Warren, Cattani},
+  title = {{oddisoGrass}},
+  url = {https://github.com/ZenoCozeno/oddisoGrass},
+  year = {2023}
+}
