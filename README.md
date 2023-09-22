@@ -8,7 +8,7 @@ We think that the code can be useful for other algebraic geometers interested in
 
 ## Installation
 
-To use the functions in this notebook, you don't need to install anything special. You can run the notebook on your local machine if you have SageMath > 9.4 installed.
+To use the functions in this notebook, you don't need to install anything special. You can run the notebook on your local machine if you have SageMath >= 9.4 installed. The modules are written in Python, but they must be run in the Python distribution bundles with the SageMath installation.
 
 ## Usage
 
