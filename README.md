@@ -1,4 +1,4 @@
-# oddisoGrass
+# OddIsoGrass
 
 A [SageMath](https://www.sagemath.org) notebook to prove exceptionality and fullness of collections of homogeneous bundles on odd isotropic Grassmannians IGr(3,2n+1).
 
