@@ -10,8 +10,8 @@ Functions:
     staircase: the most relevant way to initialize a complex
 """
 
-from utilities import LRfactors, formatting
-from vanishing_odd import vanishingOddGrass
+from src.utilities import LRfactors, formatting
+from src.vanishing_odd import vanishingOddGrass
 from collections import defaultdict, Counter
 
 import numpy as np

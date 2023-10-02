@@ -122,19 +122,20 @@ def apply_wedge(generated,k,n):
     added = copy.deepcopy(generated)
     w = 2*n+1-k
     # iterate through the columns where we can apply symplectic relations
-    for i in range(n+2-k,w+1):
+    for i in range(n+2-k, w+1):
         # iterate through every bundle with a+b=i
         # TODO: improve the iteration to avoid nested for
         for t in generated.keys():
             if t[0]-t[1] == i:
-                common_part = set(range(w))
+                common_part = set(range(w+1))
                 # iterate through vector bundles with smaller equal a+b to determine the common twists that they all have
                 for s in generated.keys():
                     if ((s[0]-s[1] <= i) and (s!=t)):
-                        common_part = common_part.intersection(D[s])
+                        common_part = common_part.intersection(generated[s])
                 # add the common twists
-                added[t]=added[t].union(common_part)
-        # print out the added terms if any 
+                added[t]=generated[t].union(common_part)
+    # print out the added terms if any 
+    for t in generated.keys():
         if added[t] != generated[t]:
             print(f"Using symplectic relations, we obtain for {t} the additional twists:", added[t] - generated[t])
     return added

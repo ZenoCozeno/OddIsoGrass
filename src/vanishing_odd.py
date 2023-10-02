@@ -2,7 +2,7 @@ import numpy as np
 from collections import defaultdict, Counter
 from typing import Tuple
 
-from utilities import formatting, LRfactors
+from src.utilities import formatting, LRfactors
 
 def vanishingEvenGrass(weight:np.array, k:int, n:int) -> bool:
     """
